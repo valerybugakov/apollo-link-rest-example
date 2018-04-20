@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ApolloProvider } from "react-apollo";
-import client from "./networkClient";
+import client from "./api/networkClient";
+import "./api/imperative";
 import SearchPage from "./SearchPage";
 
 class App extends Component {

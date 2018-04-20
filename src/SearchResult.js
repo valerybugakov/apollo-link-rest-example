@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
 import Season from "./Season";
-import client from "./networkClient";
+import { showsQuery } from "./api/queries";
 
 class ShowsResult extends Component {
   render() {
@@ -32,36 +31,6 @@ class ShowsResult extends Component {
   }
 }
 
-const showsQuery = gql`
-  query shows($searchInput: String!) {
-    show(search: $searchInput)
-      @rest(type: "Show", path: "singlesearch/shows?q=:search") {
-      id @export(as: "showId")
-      name
-      seasons @rest(type: "Season", path: "shows/:showId/seasons") {
-        number
-        image
-        summary
-      }
-    }
-  }
-`;
-
-// imperative query
-setTimeout(() => {
-  client
-    .query({
-      query: showsQuery,
-      variables: {
-        searchInput: "wow"
-      }
-    })
-    .then(params => {
-      console.log(params.data.show.name);
-    });
-}, 2000);
-
-// declarative container query
 export default graphql(showsQuery, {
   options: ({ searchInput }) => ({ variables: { searchInput } })
 })(ShowsResult);
